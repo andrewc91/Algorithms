@@ -61,7 +61,16 @@ LinkedList.prototype.length = function(){
     count += 1;
     current = current.next;
   }
-  console.log(count);
+}
+// Find count recursively
+LinkedList.prototype.rLength = function(){
+  var recurseList = function(current){
+    if (current === null){
+      return 0;
+    }
+    return 1 + recurseList(current.next);
+  }
+  return recurseList(this.head);
 }
 
 LinkedList.prototype.max = function(){
@@ -287,22 +296,22 @@ LinkedList.prototype.append = function(val, after){
 }
 
 LinkedList.prototype.removeVal = function(val){
-  var walker = this.head;
-  var runner = this.head.next;
-
+  if (!this.head){
+    return null;
+  }
   if (this.head.value == val){
-    this.head = runner;
+    this.head = this.head.next;
     return;
   }
-  while (runner){
-    if (runner.value == val){
-      walker.next = runner.next;
+  var current = this.head;
+
+  while(current){
+    if (current.next.value == val){
+      current.next = current.next.next;
       return;
     }
-    runner = runner.next;
-    walker = walker.next;
+    current = current.next;
   }
-  return;
 }
 
 LinkedList.prototype.removeNegatives = function(){
@@ -346,19 +355,24 @@ LinkedList.prototype.secondLastValue = function(){
 }
 
 LinkedList.prototype.nthFromEnd = function(num){
+  if (!this.head){
+    return null;
+  }
   var current = this.head;
   var count = 0;
 
   while (current){
-    if (count == num){
-      return current.value;
-    }
-    count++;
     current = current.next;
+    count++;
   }
-  if (count < num){
-    return null;
+  current = this.head;
+  count = count - num;
+
+  while (count > 0){
+    current = current.next;
+    count--;
   }
+  return current;
 }
 
 LinkedList.prototype.secondLargest = function(){
@@ -430,12 +444,102 @@ LinkedList.prototype.reverse = function(){
   this.head = previous;
 }
 
-var list = new LinkedList();
+LinkedList.prototype.removeNth = function(num){
+  if (!this.head){
+    return null;
+  }
 
-list.addBack(9);
-list.addBack(10);
-list.addBack(2);
-list.addBack(3);
-list.addBack(1);
-console.log(list);
-console.log(list.nthFromEnd(3))
+  var walker = this.head;
+  var runner = this.head;
+
+  for (var i = 0; i < num; i++){
+    runner = runner.next;
+    if (runner == null){
+      return null;
+    }
+  }
+
+  while (runner.next){
+    runner = runner.next;
+    walker = walker.next;
+  }
+  walker.next = walker.next.next;
+}
+
+// if Linked List is sorted
+LinkedList.prototype.removeDuplicates = function(){
+  var current = this.head;
+
+  while (current.next){
+    if (current.value == current.next.value){
+      current.next = current.next.next;
+    }
+    else {
+      current = current.next;
+    }
+  }
+}
+
+
+// if Linked List is not sorted
+LinkedList.prototype.removeDupes = function(){
+  if (!this.head){
+    return null;
+  }
+  if (!this.head.next){
+    return this.head;
+  }
+
+  var current = this.head;
+  var map = {};
+  map[this.head.value] = 1;
+
+  while (current){
+    if (map[current.next.value] == 1){
+      map[current.value] = 1;
+      current.next = current.next.next;
+    }
+    else {
+      map[current.value] = 1;
+    }
+    current = current.next;
+  }
+}
+
+
+LinkedList.prototype.RemoveKthLast = function(num){
+  var count = 0;
+  var current = this.head;
+
+  while (current){
+    count++;
+    current = current.next;
+  }
+  current = this.head;
+  count = count - num - 1;
+
+  while (count > 0){
+    current = current.next;
+    count--;
+  }
+
+  current.next = current.next.next;
+}
+
+LinkedList.prototype.removeMiddleNode = function(){
+  var count = 0;
+  var current = this.head;
+
+  while (current){
+    count += 1;
+    current = current.next;
+  }
+  count = Math.floor(count/2) - 1;
+  current = this.head;
+
+  while (count > 0){
+    current = current.next;
+    count--;
+  }
+  current.next = current.next.next;
+}

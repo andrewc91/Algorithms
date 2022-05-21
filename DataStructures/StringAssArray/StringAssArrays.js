@@ -30,6 +30,7 @@ function getDigits(str){
   console.log(result);
 }
 
+
 function acronyms(str){
   var result = "";
   var split = str.split(" ");
@@ -39,6 +40,7 @@ function acronyms(str){
   }
   console.log(result);
 }
+
 
 function countSpace(str){
   var count = 0;
@@ -93,14 +95,14 @@ function parensValid(str){
   var closed = 0;
 
   for (var i = 0; i < str.length; i++){
+    if (closed > open){
+      return false;
+    }
     if (str[i] == "("){
       open += 1;
     }
     if (str[i] == ")"){
       closed += 1;
-    }
-    if (closed > open){
-      return false;
     }
   }
   if (open === closed){
@@ -110,6 +112,7 @@ function parensValid(str){
     return false;
   }
 }
+
 
 function isPalindrome(str){
   for (var i = 0; i < Math.floor(str.length / 2); i++){

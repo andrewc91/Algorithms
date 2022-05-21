@@ -1,87 +1,118 @@
-function bubbleSort(arr){
-  var temp;
+function bubbleSort(arr) {
+  let length = arr.length;
 
-  for (var i = arr.length - 1; i > 0; i--){
-    for (var j = 0; j < i; j++){
-      if (arr[j] > arr[j + 1]){
-        temp = arr[j+1];
-        arr[j+1] = arr[j];
-        arr[j] = temp;
+  for (let i = 0; i < length - 1; i++) {
+    for (let j = 0; j < length - 1 - i; j++) {
+      if (arr[j] > arr[j + 1]) {
+        swap(arr, j, j + 1);
       }
     }
   }
   return arr;
 }
 
-function selectionSort(arr){
-  var min;
-  var temp;
-  var idx;
+function betterBubble(arr) {
+  let length = arr.length;
+  let swapped;
 
-  for (var i = 0; i < arr.length; i++){
-    min = arr[i];
-    idx = i;
-
-    for (var j = i+1; j < arr.length; j++){
-      if (arr[j] < min){
-        min = arr[j];
-        idx = j;
+  for (let i = 0; i < length - 1; i++) {
+    swapped = false;
+    for (let j = 0; j < length - 1 - i; j++) {
+      if (arr[j] > arr[j + 1]) {
+        swap(arr, j, j + 1);
+        swapped = true;
       }
     }
-    temp = min;
-    arr[idx] = arr[i];
-    arr[i] = temp;
+    if (swapped === false) {
+      break;
+    }
   }
   return arr;
 }
 
-function insertionSort(arr){
-  for (var i = 1; i < arr.length; i++){
-    var temp = arr[i];
-    var j = i-1;
-    while ((j >= 0) && (arr[j] > temp)){
-      arr[j+1] = arr[j];
+function selectionSort(arr) {
+  let length = arr.length;
+  let min;
+
+  for (let i = 0; i < length - 1; i++) {
+    min = i;
+    for (let j = i + 1; j < length; j++) {
+      if (arr[j] < arr[min]) {
+        min = j;
+      }
+    }
+    if (min !== i) {
+      swap(arr, i, min);
+    }
+  }
+  return arr;
+}
+
+function insertionSort(arr) {
+  let length = arr.length;
+  let value, j;
+
+  for (let i = 1; i < length; i++) {
+    value = arr[i];
+    j = i - 1;
+    while (j >= 0 && value < arr[j]) {
+      swap(arr, j, j + 1);
       j--;
     }
-    arr[j+1] = temp;
   }
   return arr;
 }
 
-function combineArray(arr1, arr2){
-  var newArr = [];
-  var idx1 = 0;
-  var idx2 = 0;
+function swap(arr, idx1, idx2) {
+  let temp = arr[idx1];
+  arr[idx1] = arr[idx2];
+  arr[idx2] = temp;
+}
 
-  while ((idx1 < arr1.length) && (idx2 < arr2.length)){
-    if (arr1[idx1] == arr2[idx2]){
-      newArr.push(arr1[idx1]);
-      newArr.push(arr2[idx2]);
-      idx1++;
-      idx2++;
+
+function mergeSort(arr){
+  if (arr.length <= 1){
+    return arr;
+  }
+  let mid = Math.floor(arr.length/2);
+  let left = mergeSort(arr.slice(0, mid));
+  let right = mergeSort(arr.slice(mid));
+  return merge(left, right);
+
+}
+
+function merge(arr1, arr2){
+  var result = [];
+  var i = 0;
+  var j = 0;
+
+  while ((i < arr1.length) && (j < arr2.length)) {
+    if (arr1[i] == arr2[j]) {
+      result.push(arr1[i]);
+      result.push(arr2[j]);
+      i++;
+      j++;
     }
-    if (arr1[idx1] < arr2[idx2]){
-      newArr.push(arr1[idx1]);
-      idx1++;
-    }
-    if (arr1[idx1] > arr2[idx2]){
-      newArr.push(arr2[idx2]);
-      idx2++;
+    else {
+      if (arr1[i] < arr2[j]){
+        result.push(arr1[i]);
+        i++;
+      }
+      else {
+        result.push(arr2[j]);
+        j++;
+      }
     }
   }
-
-  if (idx1 == arr1.length){
-    for (var i = idx2; i < arr2.length; i++){
-      newArr.push(arr2[i]);
-    }
+  while (i < arr1.length){
+    result.push(arr1[i]);
+    i++;
   }
-  else {
-    for (var i = idx1; i < arr1.length; i++){
-      newArr.push(arr1[i]);
-    }
+  while (j < arr2.length){
+    result.push(arr2[j]);
+    j++;
   }
-
-  return newArr;
+  return result;
 }
 
 
@@ -132,10 +163,4 @@ function quickSort(arr){
     partition(wall+1, right);
   }
   return partition(0, arr.length-1);
-}
-
-Array.prototype.swap = function(idx1, idx2){
-    var temp = this[idx1]
-    this[idx1] = this[idx2]
-    this[idx2] = temp
 }

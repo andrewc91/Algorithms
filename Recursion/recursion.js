@@ -1,4 +1,3 @@
-
 function recursiveSigma(number){
   var sum = 0;
 
